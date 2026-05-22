@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light"> <!-- default theme -->
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-body">
+
+<div class="container mt-5">
+  <!-- Theme toggle button -->
+  <div class="d-flex justify-content-end mb-3">
+    <button id="themeToggle" class="btn btn-sm btn-outline-secondary">🌙 Dark</button>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title text-center mb-4">Create Account</h3>
+
+          <!-- Flash messages -->
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, msg in messages %}
+                <div class="alert alert-{{ 'danger' if category=='error' else category }} alert-dismissible fade show" role="alert">
+                  {{ msg }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+
+          <!-- Register form -->
+          <form action="/register" method="POST">
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input type="text" name="u" class="form-control" required autocomplete="off">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" id="password" name="p" class="form-control" required autocomplete="off">
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" onclick="togglePassword()">
+                <label class="form-check-label">Show Password</label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Register</button>
+          </form>
+
+          <div class="text-center mt-3">
+            <a href="/login">Already have an account? Sign in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function togglePassword() {
+  const pw = document.getElementById("password");
+  pw.type = pw.type === "password" ? "text" : "password";
+}
+
+// Dark/Light theme toggle with persistence
+const toggleBtn = document.getElementById("themeToggle");
+const html = document.documentElement;
+
+// Load saved theme on page load
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  html.setAttribute("data-bs-theme", savedTheme);
+  toggleBtn.textContent = savedTheme === "light" ? "🌙 Dark" : "☀️ Light";
+}
+
+// Toggle theme on click
+toggleBtn.addEventListener("click", () => {
+  const currentTheme = html.getAttribute("data-bs-theme");
+  const newTheme = currentTheme === "light" ? "dark" : "light";
+  html.setAttribute("data-bs-theme", newTheme);
+  localStorage.setItem("theme", newTheme); // save choice
+  toggleBtn.textContent = newTheme === "light" ? "🌙 Dark" : "☀️ Light";
+});
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
