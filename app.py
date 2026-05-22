@@ -7,15 +7,19 @@ from auth import login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 
+# Flask app setup
 app = Flask(__name__, template_folder="templates")
 app.secret_key = "secret"
 
+# Upload folder
 UPLOAD_FOLDER = "data/resumes"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+# Initialize databases
 init_db()
 init_user_db()
 
+# Password validation
 def validate_password(password):
     return (len(password) >= 8 and
             re.search(r"[A-Z]", password) and
@@ -23,11 +27,13 @@ def validate_password(password):
             re.search(r"\d", password) and
             re.search(r"[!@#$%^&*]", password))
 
+# Skill extraction
 def extract_skills(text):
     """Simple keyword extraction from job description"""
     words = re.findall(r"\b[a-zA-Z]+\b", text.lower())
     return [w for w in words if w not in ENGLISH_STOP_WORDS]
 
+# Routes
 @app.route("/")
 @login_required
 def home():
@@ -114,7 +120,6 @@ def rank_resumes():
     all_results = get_all_results(user["id"])
     return render_template("results.html", results=all_results)
 
-
 @app.route("/delete/<filename>", methods=["POST"])
 @login_required
 def delete_rank(filename):
@@ -135,5 +140,6 @@ def clear_all_ranks():
 def page_not_found(e):
     return render_template("404.html"), 404
 
+# Local run only (Gunicorn ignores this block)
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
