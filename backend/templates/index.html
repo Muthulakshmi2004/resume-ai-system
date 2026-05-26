@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light"> <!-- default theme -->
+<head>
+  <meta charset="UTF-8">
+  <title>Resume Ranking</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-body">
+
+<div class="container mt-4">
+  <!-- Theme toggle + logout -->
+  <div class="d-flex justify-content-end mb-3">
+    <button id="themeToggle" class="btn btn-sm btn-outline-secondary me-2">🌙 Dark</button>
+    <a href="/logout" class="btn btn-outline-danger">Logout</a>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title mb-4">Resume Ranking System</h2>
+
+      <!-- Flash messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, msg in messages %}
+            <div class="alert alert-{{ 'danger' if category=='error' else category }} alert-dismissible fade show" role="alert">
+              {{ msg }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <!-- Ranking form -->
+      <form action="/rank" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label">Job Description</label>
+          <textarea name="job_description" class="form-control" rows="5" placeholder="Paste job description here..." required></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Upload Resumes</label>
+          <input type="file" name="resumes" class="form-control" multiple required>
+        </div>
+        <button type="submit" class="btn btn-primary">Rank Resumes</button>
+      </form>
+
+      <div class="mt-3">
+        <a href="/analytics" class="btn btn-outline-secondary">View Analytics</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Dark/Light theme toggle with persistence
+const toggleBtn = document.getElementById("themeToggle");
+const html = document.documentElement;
+
+// Load saved theme on page load
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  html.setAttribute("data-bs-theme", savedTheme);
+  toggleBtn.textContent = savedTheme === "light" ? "🌙 Dark" : "☀️ Light";
+}
+
+// Toggle theme on click
+toggleBtn.addEventListener("click", () => {
+  const currentTheme = html.getAttribute("data-bs-theme");
+  const newTheme = currentTheme === "light" ? "dark" : "light";
+  html.setAttribute("data-bs-theme", newTheme);
+  localStorage.setItem("theme", newTheme); // save choice
+  toggleBtn.textContent = newTheme === "light" ? "🌙 Dark" : "☀️ Light";
+});
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
