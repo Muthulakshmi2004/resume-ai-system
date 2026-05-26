@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Flask==3.0.3
 gunicorn==22.0.0
 Werkzeug==3.0.2
@@ -18,3 +19,40 @@ python-docx==1.1.2
 
 opencv-python==4.9.0.80
 pillow==10.3.0
+=======
+flask
+tensorflow
+opencv-python
+numpy
+pillow
+flask==3.0.3
+spacy==3.7.4
+pdfminer.six==20231228
+sentence-transformers==3.0.1
+scikit-learn==1.5.0
+numpy==1.26.4
+# Web framework
+Flask==3.0.3
+
+# Database
+sqlite3-binary==0.0.1  # sqlite is built-in, but this ensures compatibility if needed
+
+# Authentication / Security
+Werkzeug==3.0.2
+
+# PDF parsing
+PyMuPDF==1.24.4   # fitz
+
+# NLP
+spacy==3.7.4
+en-core-web-sm==3.7.0  # spaCy model (install via: python -m spacy download en_core_web_sm)
+
+# Machine Learning
+scikit-learn==1.5.0
+
+# Resume parsing helpers
+pdfminer.six==20231228  # optional, if you still want to keep pdfminer alongside PyMuPDF
+
+# Chart rendering (frontend)
+chart.js  # included via CDN in templates, not needed in requirements.txt
+>>>>>>> 52e9cade6c8042d7c89dd0262ecf08c29ddc3bcf
